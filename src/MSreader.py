@@ -1,3 +1,6 @@
+import os
+import re
+
 
 def extract_values(lines, variable_name):
     """
@@ -12,7 +15,7 @@ def extract_values(lines, variable_name):
     values = []
     for line in lines:
         if variable_name in line:
-            parts = line.split()
+            parts = re.split('[ =, ]+',line)
             for i in range(len(parts)):
                 if parts[i] == variable_name:
                     try:
