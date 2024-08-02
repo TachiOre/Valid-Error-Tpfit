@@ -1,13 +1,14 @@
 import os
 import re
 
-def separate_stepblock(lines, key='----------------------------------------------------------------------'):
+def separate_stepblock(data_txt, key='----------------------------------------------------------------------'):
+    lines = data_txt.split(key)
     list_preset= []
     list_isteprow=[]
     for i,block in enumerate(lines) :
         if i ==0:
-            line_preset.split("\n")
-            list_preset.append(line)
+            line_preset= block.split("\n")
+            list_preset.append(line_preset)
         else:
             line = block.split("\n")
             list_isteprow.append(line[1:-1])
