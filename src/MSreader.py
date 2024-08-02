@@ -1,6 +1,18 @@
 import os
 import re
 
+def separate_stepblock(lines, key='----------------------------------------------------------------------'):
+    list_preset= []
+    list_isteprow=[]
+    for i,block in enumerate(lines) :
+        if i ==0:
+            line_preset.split("\n")
+            list_preset.append(line)
+        else:
+            line = block.split("\n")
+            list_isteprow.append(line[1:-1])
+
+    return list_preset, list_isteprow    
 
 def extract_values(lines, variable_name):
     """
