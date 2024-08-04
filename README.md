@@ -1,4 +1,4 @@
-# Vlid-Error-Tpfit
+# Valid-Error-Tpfit
 - msファイルから解析の進捗状況を可視化するプログラム
 
 
