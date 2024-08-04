@@ -158,8 +158,8 @@ def get_data_from_binary(filename):
         binary_data_S = file.read()
 
     # 単精度浮動小数点数に変換
-    float_list_S = struct.unpack('f' * (len(binary_data_S) // 4), binary_data_S)
-    return float_list_S
+    float_list = struct.unpack('f' * (len(binary_data_S) // 4), binary_data_S)
+    return float_list
 
 
 def main():
