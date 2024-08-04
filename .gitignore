@@ -1,0 +1,7 @@
+/src/__pycache__/
+/yolo_model/
+venv
+.venv
+*.egg-info
+__pycache__
+
