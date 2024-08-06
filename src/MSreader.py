@@ -15,6 +15,26 @@ def separate_stepblock(data_txt, key='------------------------------------------
 
     return list_preset, list_isteprow    
 
+def convert_to_figure(value_str):
+    if '.' in value_str:
+        if 'E' not in value_str:
+            if  '+' in value_str:
+                figures_splited = value_str.split('+')
+                return float(figures_splited[0]+'E+'+figures_splited[1])
+            elif '-' in value_str:
+                figures_splited = value_str.split('-')
+                return float(figures_splited[0]+'E-'+figures_splited[1])
+            else:
+                return float(value_str)
+        else:
+            return float(value_str)
+    elif 'E' in value_str:
+        return float(value_str)
+    else:
+        return int(value_str)
+    
+
+
 def extract_values(lines, variable_name):
     """
     出力msファイルの記述からパラメータに対応する数値を抽出する。
@@ -25,10 +45,11 @@ def extract_values(lines, variable_name):
     Returns:
         values : 抽出するパラメータの数値
     """
-    values = []
+    value=None
     for line in lines:
         if variable_name in line:
             parts = re.split('[ =, ]+',line)
+
             for i in range(len(parts)):
                 if parts[i] == variable_name:
                     try:
@@ -39,15 +60,18 @@ def extract_values(lines, variable_name):
                             value_str = parts[i + 1]
                         
                         # 数字部分がintかfloatかをチェックして変換
-                        value = int(value_str) if '.' not in value_str and 'e' not in value_str.lower() else float(value_str)
-                        values.append(value)
+                        # print(value_str)
+                        # value = int(value_str) if '.' not in value_str and 'e' not in value_str.lower() else float(value_str)
+                        value = convert_to_figure(value_str)
+                        # print(value)
+                        return value
+                        
                     except (IndexError, ValueError):
-                        values.append(None)
-    return values
+                        value = None
+    
+    return value
 
 
-def convert_to_figure(value_str):
-    return int(value_str) if '.' not in value_str and 'e' not in value_str.lower() else float(value_str)
 
 def extract_values_with_posi(lines, variable_name,is_from_zero=False):
     """
@@ -59,16 +83,23 @@ def extract_values_with_posi(lines, variable_name,is_from_zero=False):
     Returns:
         values : 抽出するパラメータの数値
     """
-    values = []
+    # print(variable_name)
     posi = []
+    value=None
+    posi_para= None
     for line in lines:
         if variable_name in line:
             parts = re.split('[ =,() ]+',line)
             # print(parts)
+
             for i in range(len(parts)):
                 if parts[i] == variable_name:
                     try:
-                        value_str = parts[i + 1]
+                        # 等号がある場合を考慮
+                        if parts[i + 1] == '=':
+                            value_str = parts[i + 2]
+                        else:
+                            value_str = parts[i + 1]
 
                         # 該当する点のposiを抽出
                         if is_from_zero is True:
@@ -82,13 +113,14 @@ def extract_values_with_posi(lines, variable_name,is_from_zero=False):
                                         convert_to_figure(parts[i+4])-1,
                                         convert_to_figure(parts[i+5])-1
                                         )
-                        # print(posi_para)
-                        posi.append(posi_para)
+
 
 
                         # 数字部分がintかfloatかをチェックして変換
-                        value = int(value_str) if '.' not in value_str and 'e' not in value_str.lower() else float(value_str)
-                        values.append(value)
+                        value = convert_to_figure(value_str)
+                        return value,posi_para
+                    
                     except (IndexError, ValueError):
-                        values.append(None)
-    return values,posi
+                        value = None
+                        posi_para= None
+    return value,posi_para
